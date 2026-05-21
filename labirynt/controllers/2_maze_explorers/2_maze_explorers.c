@@ -32,7 +32,6 @@
 
 /* Podazanie */
 #define FOLLOW_DISTANCE      0.15
-#define TOO_CLOSE_DISTANCE   0.10
 #define CATCH_UP_DISTANCE    0.25
 
 /* Opoznienie formacji po spotkaniu / zamianie */
@@ -538,8 +537,9 @@ static void follower_step(double v[8]) {
     return;
   }
 
-  /* Anti-push: cofnij sie jesli za blisko lidera */
-  if (leader_dist < TOO_CLOSE_DISTANCE) {
+  /* Anti-push: cofnij sie tylko gdy fizycznie prawie dotyka (sensory) */
+  double front_close = v[0] > v[7] ? v[0] : v[7];
+  if (front_close > 700.0) {
     set_speed(-BASE_SPEED * 0.15, -BASE_SPEED * 0.15);
     return;
   }
