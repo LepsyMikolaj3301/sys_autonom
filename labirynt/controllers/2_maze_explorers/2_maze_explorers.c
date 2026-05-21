@@ -31,8 +31,9 @@
 #define MEET_CONFIRM_STEPS   3
 
 /* Podazanie */
-#define FOLLOW_DISTANCE      0.20
-#define TOO_CLOSE_DISTANCE   0.14
+#define FOLLOW_DISTANCE      0.15
+#define TOO_CLOSE_DISTANCE   0.10
+#define CATCH_UP_DISTANCE    0.25
 
 /* Opoznienie formacji po spotkaniu / zamianie */
 #define FORMATION_DELAY          2.0
@@ -50,7 +51,7 @@
 
 /* Historia pozycji lidera — sekwencyjne waypoint-y */
 #define LEADER_PATH_SIZE      200
-#define MIN_FOLLOW_GAP         20
+#define MIN_FOLLOW_GAP         8
 #define WAYPOINT_REACHED_DIST  0.025
 
 typedef enum {
@@ -599,13 +600,15 @@ static void follower_step(double v[8]) {
   double my_yaw       = get_robot_yaw(my_node);
   double error        = normalize_angle(target_angle - my_yaw);
 
-  /* Predkosc zalezy od dystansu do lidera */
+  /* Predkosc zalezy od dystansu do lidera — im dalej, tym szybciej */
   double speed;
 
-  if (leader_dist > FOLLOW_DISTANCE)
-    speed = BASE_SPEED * 0.40;
+  if (leader_dist > CATCH_UP_DISTANCE)
+    speed = BASE_SPEED * 0.95;          /* daleko — doganiaj pelna predkoscia */
+  else if (leader_dist > FOLLOW_DISTANCE)
+    speed = BASE_SPEED * 0.70;          /* normalna jazda za liderem */
   else
-    speed = BASE_SPEED * 0.15;
+    speed = BASE_SPEED * 0.30;          /* blisko — zwolnij */
 
   /* Ostry skret — obroc sie w miejscu */
   if (fabs(error) > 1.0) {
