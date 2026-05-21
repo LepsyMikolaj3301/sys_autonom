@@ -1,0 +1,25 @@
+1 Zadania
+Środowisko pracy: Webots 2023Rb
+Język programowania: C
+
+Uwaga: w razie desperackiej potrzeby skorzystaj z możliwości Supervisor-a do odczytywania pozycji, ale nie do
+manipulacji robotami – chyba, że na potrzeby wstępnego ustawienia sceny .
+1.1 Zadanie nr 1
+Przygotuj scenę:
+• zaprojektuj labirynt o wymiarach przynajmniej 10x10 (tunele mieszczące ∼ 1.5 robota E-puck)
+• umieść robota E-puck na wejściu do labiryntu,
+• umieść kolorowy cel na wyjściu z labiryntu.
+1.2 Zadanie nr 2
+Napisz sterownik, który nawiguje robotem po labiryncie w poszukiwaniu wyjścia.
+• Wykorzystaj czujniki odległości do sterowania ruchem robota.
+• Wykorzystaj kamerę do lokalizacji wyjścia.
+
+1.3 Zadanie nr 3
+• Dodaj kolejne wejście (wyjście) do labiryntu.
+• Dodaj drugiego robota E-puck na nowym wejściu.
+• Roboty szukają wyjścia niezależnie.
+• Jeśli roboty na siebie trafią, to
+– rozpoczynają komunikację,
+– losowo wybierają lidera,
+– lider prowadzi, drugi robot podąża za nim,
+– jeśli lider nie jest w stanie dalej jechać, to roboty zamieniają się rolami.
