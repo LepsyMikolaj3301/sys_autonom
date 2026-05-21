@@ -603,22 +603,24 @@ static void follower_step(double v[8]) {
   /* Predkosc zalezy od dystansu do lidera — im dalej, tym szybciej */
   double speed;
 
-  if (leader_dist > CATCH_UP_DISTANCE)
-    speed = BASE_SPEED * 0.95;          /* daleko — doganiaj pelna predkoscia */
+  if (leader_dist > CATCH_UP_DISTANCE * 2.0)
+    speed = MAX_SPEED;                  /* bardzo daleko — maksymalna predkosc */
+  else if (leader_dist > CATCH_UP_DISTANCE)
+    speed = BASE_SPEED * 1.2;           /* daleko — doganiaj szybko */
   else if (leader_dist > FOLLOW_DISTANCE)
-    speed = BASE_SPEED * 0.70;          /* normalna jazda za liderem */
+    speed = BASE_SPEED;                 /* normalna jazda za liderem */
   else
-    speed = BASE_SPEED * 0.30;          /* blisko — zwolnij */
+    speed = BASE_SPEED * 0.5;           /* blisko — lekko zwolnij */
 
-  /* Ostry skret — obroc sie w miejscu */
+  /* Ostry skret — obroc sie w miejscu, ale szybciej */
   if (fabs(error) > 1.0) {
-    double turn = clamp(error * 1.0, -1.5, 1.5);
+    double turn = clamp(error * 1.5, -2.5, 2.5);
     set_speed(-turn, turn);
     return;
   }
 
   /* Sterowanie proporcjonalne */
-  double turn = clamp(error * 1.5, -1.5, 1.5);
+  double turn = clamp(error * 2.0, -2.0, 2.0);
   set_speed(speed - turn, speed + turn);
 }
 
