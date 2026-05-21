@@ -647,7 +647,7 @@ static bool is_goal_reached(double v[8]) {
     return false;
 
   bool touching = v[0] > 800.0 || v[7] > 800.0;
-  return touching || green_count >= GREEN_PIXEL_CLOSE;
+  return touching && green_count >= GREEN_PIXEL_CLOSE;
 }
 
 /* ================================================================ */
