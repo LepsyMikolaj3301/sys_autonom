@@ -638,6 +638,11 @@ static bool is_goal_reached(double v[8]) {
     }
   }
 
+  /* Cel musi byc widoczny (zielone piksele) — sam dotyk sensora
+     nie wystarczy, bo moze to byc drugi robot a nie cel. */
+  if (green_count < GREEN_PIXEL_MIN)
+    return false;
+
   bool touching = v[0] > 800.0 || v[7] > 800.0;
   return touching || green_count >= GREEN_PIXEL_CLOSE;
 }
