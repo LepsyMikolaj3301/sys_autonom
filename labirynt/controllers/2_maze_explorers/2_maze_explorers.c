@@ -20,8 +20,8 @@
 #define WALL_OFF           80.0
 
 /* Detekcja celu */
-#define PURPLE_PIXEL_MIN    30
-#define PURPLE_PIXEL_CLOSE  2000
+#define GREEN_PIXEL_MIN    30
+#define GREEN_PIXEL_CLOSE  2000
 
 /* Omijanie sciany przy widocznym celu */
 #define AVOID_STEPS        8
@@ -130,8 +130,8 @@ static void set_speed(double left, double right) {
   wb_motor_set_velocity(right_motor, right);
 }
 
-static bool is_purple(int r, int g, int b) {
-  return r > 80 && b > 80 && r > g * 2 && b > g * 2;
+static bool is_green(int r, int g, int b) {
+  return g > 80 && g > r * 1.5 && g > b * 1.5;
 }
 
 static double normalize_angle(double a) {
@@ -388,8 +388,8 @@ static bool leader_made_counterclockwise_loop(void) {
 static bool search_or_leader_step(double v[8]) {
   const unsigned char *image = wb_camera_get_image(cam);
 
-  int purple_count = 0;
-  int purple_x_sum = 0;
+  int green_count = 0;
+  int green_x_sum = 0;
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
@@ -397,22 +397,22 @@ static bool search_or_leader_step(double v[8]) {
       int g = wb_camera_image_get_green(image, width, x, y);
       int b = wb_camera_image_get_blue(image,  width, x, y);
 
-      if (is_purple(r, g, b)) {
-        purple_count++;
-        purple_x_sum += x;
+      if (is_green(r, g, b)) {
+        green_count++;
+        green_x_sum += x;
       }
     }
   }
 
   /* ── Cel widoczny ── */
-  if (purple_count >= PURPLE_PIXEL_MIN) {
-    int purple_cx = purple_x_sum / purple_count;
+  if (green_count >= GREEN_PIXEL_MIN) {
+    int green_cx = green_x_sum / green_count;
     int img_cx   = width / 2;
-    int offset   = purple_cx - img_cx;
+    int offset   = green_cx - img_cx;
 
     bool touching = v[0] > 800.0 || v[7] > 800.0;
 
-    if (touching || purple_count >= PURPLE_PIXEL_CLOSE) {
+    if (touching || green_count >= GREEN_PIXEL_CLOSE) {
       set_speed(0.0, 0.0);
       printf("[%s] >>> CEL OSIAGNIETY! <<<\n", my_name);
       return true;
@@ -442,7 +442,7 @@ static bool search_or_leader_step(double v[8]) {
 
       avoid_steps_left--;
     } else {
-      double approach = 1.0 - ((double)purple_count / (double)PURPLE_PIXEL_CLOSE);
+      double approach = 1.0 - ((double)green_count / (double)GREEN_PIXEL_CLOSE);
       if (approach < 0.25) approach = 0.25;
 
       double spd        = BASE_SPEED * approach;
@@ -628,7 +628,7 @@ static void follower_step(double v[8]) {
 
 static bool is_goal_reached(double v[8]) {
   const unsigned char *image = wb_camera_get_image(cam);
-  int purple_count = 0;
+  int green_count = 0;
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
@@ -636,18 +636,18 @@ static bool is_goal_reached(double v[8]) {
       int g = wb_camera_image_get_green(image, width, x, y);
       int b = wb_camera_image_get_blue(image,  width, x, y);
 
-      if (is_purple(r, g, b))
-        purple_count++;
+      if (is_green(r, g, b))
+        green_count++;
     }
   }
 
-  /* Cel musi byc widoczny (fioletowe piksele) — sam dotyk sensora
+  /* Cel musi byc widoczny (zielone piksele) — sam dotyk sensora
      nie wystarczy, bo moze to byc drugi robot a nie cel. */
-  if (purple_count < PURPLE_PIXEL_MIN)
+  if (green_count < GREEN_PIXEL_MIN)
     return false;
 
   bool touching = v[0] > 800.0 || v[7] > 800.0;
-  return touching || purple_count >= PURPLE_PIXEL_CLOSE;
+  return touching || green_count >= GREEN_PIXEL_CLOSE;
 }
 
 /* ================================================================ */
