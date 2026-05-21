@@ -1,0 +1,16 @@
+INFO: 2_maze_explorers: Starting controller: "D:\paola\Studia\sem 6\Systemy autonomiczne\Webots\labirynt\controllers\2_maze_explorers\2_maze_explorers.exe"
+INFO: 2_maze_explorers: Starting controller: "D:\paola\Studia\sem 6\Systemy autonomiczne\Webots\labirynt\controllers\2_maze_explorers\2_maze_explorers.exe"
+[e-puck] Start. Drugi robot: e-puck(1)
+[e-puck(1)] Start. Drugi robot: e-puck
+[e-puck] RADIO TX: e-puck LEADER e-puck
+[e-puck] Spotkanie. Zostalem liderem.
+[e-puck(1)] RADIO TX: e-puck(1) LEADER e-puck
+[e-puck(1)] Spotkanie. Podazam za liderem: e-puck
+[e-puck(1)] RADIO RX: e-puck LEADER e-puck
+[e-puck(1)] >>> CEL OSIAGNIETY (follower)! <<<
+[e-puck(1)] RADIO TX: e-puck(1) GOAL e-puck(1)
+INFO: '2_maze_explorers' controller exited successfully.
+[e-puck] RADIO RX: e-puck(1) LEADER e-puck
+[e-puck] RADIO RX: e-puck(1) GOAL e-puck(1)
+[e-puck] RADIO: Drugi robot osiagnal cel!
+INFO: '2_maze_explorers' controller exited successfully.
